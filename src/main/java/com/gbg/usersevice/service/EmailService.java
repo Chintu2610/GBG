@@ -29,17 +29,15 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-//    public void sendVerificationEmail(String toEmail, String token) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setFrom(fromEmail);
-//        message.setTo(toEmail);
-//        message.setSubject("Email Verification");
-//        message.setText("Please verify your email by clicking the link: " +
-//                "http://localhost:8080/verify?token=" + token);
-//       // https://api.tradabulls.com/userService
-//       // http://dev-api.tradabulls.com/userService
-//        mailSender.send(message);
-//    }
+    public void sendVerificationEmail(String toEmail, String token) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(fromEmail);
+        message.setTo(toEmail);
+        message.setSubject("Email Verification");
+        message.setText("Please verify your email by clicking the link: " +
+                "https://gbg-cs1u.onrender.com/verify?token=" + token);
+        mailSender.send(message);
+    }
     
     public void sendVerificationEmail(String toEmail, String token, String userName) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();

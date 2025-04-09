@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,10 +53,8 @@ public class UserInfoService implements UserInfoServiceInterface, UserDetailsSer
     public User addUser(User user) {
         String token = UUID.randomUUID().toString();
         // Combine first name and last name to set full name
-        String fname = user.getFirstName();
-        String lname = user.getLastName();
-        String fullname = fname + " " + lname;
-        user.setFullName(fullname);
+
+        user.setFullName(user.getFullName());
 
         // Set user roles (assuming roles are set as "USER")
         user.setRoles("ROLE_USER");
@@ -77,7 +74,7 @@ public class UserInfoService implements UserInfoServiceInterface, UserDetailsSer
         User savedUser = userrepository.save(user);
         
         // Send verification email
-        emailService.sendVerificationEmail(user.getEmail(), token,fname);
+        emailService.sendVerificationEmail(user.getEmail(), token,user.getFirstName());
         return savedUser;
     }
 
