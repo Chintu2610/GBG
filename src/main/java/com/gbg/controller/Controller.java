@@ -95,7 +95,7 @@ public class Controller {
 	        } catch (UsernameNotFoundException e) {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new LoginResponse("email doesn't exist"));
 	        } catch (Exception e) {
-	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(e.toString()));
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse("Bad credentials."));
 	        }
 	    }
 	    @GetMapping("/verify")
