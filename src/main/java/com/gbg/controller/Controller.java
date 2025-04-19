@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gbg.service.QueryService;
 import com.gbg.usersevice.model.AuthRequest;
 import com.gbg.usersevice.model.InquiryRequest;
+import com.gbg.usersevice.model.LoginResponse;
 import com.gbg.usersevice.model.User;
 import com.gbg.usersevice.service.EmailService;
 import com.gbg.usersevice.service.JwtService;
@@ -70,11 +71,11 @@ public class Controller {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 	 @PostMapping("/login")
-	    public ResponseEntity<String> loginUser(@RequestBody AuthRequest authRequest) {
+	    public ResponseEntity<LoginResponse> loginUser(@RequestBody AuthRequest authRequest) {
 	        try {
 	            // Check if email exists and is verified
 	            if (!userinfoservice.isUserExists(authRequest.getEmail())) {
-	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("email doesn't exist");
+	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new LoginResponse("email doesn't exist"));
 	            }
 
 	            Authentication authenticate = authenticationManager.authenticate(
@@ -83,17 +84,18 @@ public class Controller {
 
 	            if (authenticate.isAuthenticated()) {
 	                if (!userinfoservice.isUserVerified(authRequest.getEmail())) {
-	                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email not verified");
+	                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse("Email not verified"));
 	                }
+	               
 	                String token = jwtService.generateToken(authRequest.getEmail());
-	                return ResponseEntity.ok(token);
+	                return ResponseEntity.status(HttpStatus.OK).body(new LoginResponse(authRequest.getEmail(),token,"valid user."));
 	            } else {
-	                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong password");
+	                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse("Wrong password"));
 	            }
 	        } catch (UsernameNotFoundException e) {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("email doesn't exist");
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new LoginResponse("email doesn't exist"));
 	        } catch (Exception e) {
-	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong password");
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(e.toString()));
 	        }
 	    }
 	    @GetMapping("/verify")

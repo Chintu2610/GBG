@@ -54,7 +54,7 @@ public class EmailService {
                     "<p>Welcome to GBG!</p>" +
                     "<p>You are one step away</p>" +
                     "<p>Please verify your email by clicking the link below:</p>" +
-                    "<a href='https://api.tradabulls.com/userService/verify?token=" + token + "'>Verify Email</a>" +
+                    "<a href='https://gbg-cs1u.onrender.com/verify?token=" + token + "'>Verify Email</a>" +
                     "<p>Best regards,<br/>" +
                     "Support Team,</p>" +
                     "GBG" +
